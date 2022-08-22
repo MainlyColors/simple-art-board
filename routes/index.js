@@ -6,7 +6,7 @@ const router = express.Router();
 // @route GET /
 
 router.get('/', (req, res) => {
-  res.render('login.hbs');
+  res.render('login.hbs', { layout: 'login' });
 });
 
 // @desc  Dashboard

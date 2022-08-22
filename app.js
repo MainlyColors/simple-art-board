@@ -27,6 +27,9 @@ app.set('views', './views');
 // middleware
 // *****************
 
+// static files
+app.use(express.static('public'));
+
 if (process.env.NODE_ENV === 'development') {
   // logs server requests
   app.use(morgan('dev'));
