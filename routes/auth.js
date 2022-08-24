@@ -25,4 +25,18 @@ authRouter.get(
   }
 );
 
+// @desc  Google auth callback
+// @route GET /auth/logout
+
+// gets linked with /auth in app.js
+authRouter.get('/logout', (req, res, next) => {
+  // with passport middleware once we login we will have a logout method on the request object
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+});
+
 export default authRouter;
