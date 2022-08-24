@@ -36,10 +36,19 @@
     <script
       src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'
     ></script>
+{{!-- ckeditor --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.19.1/ckeditor.js" integrity="sha512-Ooi9IbjM2SIDjQ02ENbPFuuORT8F8Rc+rowcYfLneDwKRxw1+gVVj5tciVmV/APnA/Ys+qy1MbNKK3k2EaAHcw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
       // materialize requires the sidenav to be initialized for the hamburger menu to work
-      M.Sidenav.init(document.querySelector('.sidenav'))
+      M.Sidenav.init(document.querySelector('.sidenav'));
+      // materialize requires the FormSelect to be initialized for select menu to work on add story
+      M.FormSelect.init(document.querySelector('#status'))
+
+// replaces textarea because textarea has a name="body" on stories/add.hbs
+      CKEDITOR.replace('body', {
+        plugins: 'wysiwygarea, toolbar, basicstyles, link'
+      })
     </script>
   </body>
 </html>

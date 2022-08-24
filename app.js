@@ -9,6 +9,7 @@ import MongoStore from 'connect-mongo';
 
 import router from './routes/index.js';
 import authRouter from './routes/auth.js';
+import storiesRouter from './routes/stories.js';
 
 // Load Config
 dotenv.config({ path: './config/config.env' });
@@ -63,6 +64,10 @@ app.use(passport.session());
 // static files
 app.use(express.static('public'));
 
+// Body parser for form input & JSON data
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 if (process.env.NODE_ENV === 'development') {
   // logs server requests
   app.use(morgan('dev'));
@@ -75,6 +80,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/', router);
 // used on all auth endpoints
 app.use('/auth', authRouter);
+
+// used for all stories
+app.use('/stories', storiesRouter);
 
 const PORT = process.env.PORT || PORT;
 app.listen(PORT, (err) => {
