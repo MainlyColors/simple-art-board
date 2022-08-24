@@ -32,7 +32,9 @@
             <a href='/stories/{{_id}}'></a>{{title}}
           </td>
           <td>
-            {{createdAt}}
+            {{! formatDate is a HBS helper functions we created that uses moment.js }}
+            {{! when using function in handlebars you don't need (), this uses 2 args }}
+            {{formatDate createdAt 'MMMM Do YYYY, h:mm:ss a'}}
           </td>
           <td>
             <span class='dash-status'>
