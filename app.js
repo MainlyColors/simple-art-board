@@ -5,6 +5,7 @@ import * as expHandleBars from 'express-handlebars';
 import passport from 'passport';
 import session from 'express-session';
 import { connectDb } from './config/db.js';
+import MongoStore from 'connect-mongo';
 
 import router from './routes/index.js';
 import authRouter from './routes/auth.js';
@@ -44,12 +45,14 @@ app.use(
     // Forces the session to be saved back to the session store, even if the session was never modified during the request. false === dont save
     resave: false,
     /*
-  Forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified. Choosing false is useful for implementing login sessions, reducing server storage usage, or complying with laws that require permission before setting a cookie.
-   */
+    Forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified. Choosing false is useful for implementing login sessions, reducing server storage usage, or complying with laws that require permission before setting a cookie.
+    */
     // don't create a session until session is stored
     saveUninitialized: false,
     // wont work without HTTPS
     // cookie: { secure: true }
+    // will check database for the auth already being there
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 
