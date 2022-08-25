@@ -55,22 +55,28 @@ storiesRouter.get('/', ensureAuth, async (req, res) => {
 
 // check if already authenticated then move to /dashboard else next
 storiesRouter.get('/edit/:id', ensureAuth, async (req, res) => {
-  const story = await StoryModel.findOne({
-    _id: req.params.id,
-  }).lean();
+  try {
+    const story = await StoryModel.findOne({
+      _id: req.params.id,
+    }).lean();
 
-  // if no story in DB then 404
-  if (!story) {
-    return res.render('error/404');
-  }
+    // if no story in DB then 404
+    if (!story) {
+      return res.render('error/404');
+    }
 
-  // if story user doesn't match current login user
-  // strict !== doesn't work because
-  /// ObjectId("6303e05ae5417ca32ba01629") vs 6303e05ae5417ca32ba01629
-  if (story.user != req.user.id) {
-    res.redirect('/stories');
-  } else {
-    res.render('stories/edit', { story });
+    // if story user doesn't match current login user
+    // strict !== doesn't work because
+    /// ObjectId("6303e05ae5417ca32ba01629") vs 6303e05ae5417ca32ba01629
+    if (story.user != req.user.id) {
+      res.redirect('/stories');
+    } else {
+      res.render('stories/edit', { story });
+    }
+  } catch (err) {
+    console.log('💣💣💣 BANG BANG ERROR 💣💣💣');
+    console.error(err);
+    res.render('error/500');
   }
 });
 
@@ -79,28 +85,49 @@ storiesRouter.get('/edit/:id', ensureAuth, async (req, res) => {
 
 // check if already authenticated then move to /dashboard else next
 storiesRouter.put('/:id', ensureAuth, async (req, res) => {
-  let story = await StoryModel.findById(req.params.id).lean();
+  try {
+    let story = await StoryModel.findById(req.params.id).lean();
 
-  // story not found
-  if (!story) {
-    return res.render('error/404');
+    // story not found
+    if (!story) {
+      return res.render('error/404');
+    }
+
+    // if story user doesn't match current login user
+    // strict !== doesn't work because
+    /// ObjectId("6303e05ae5417ca32ba01629") vs 6303e05ae5417ca32ba01629
+    if (story.user != req.user.id) {
+      res.redirect('/stories');
+    } else {
+      // find using {_id: req.params.id} and replace with req.body
+      story = await StoryModel.findOneAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        // options, if no resource found then create one, runValidators === check mongoose fields are right
+        { new: true, runValidators: true }
+      );
+
+      res.redirect('/dashboard');
+    }
+  } catch (err) {
+    console.log('💣💣💣 BANG BANG ERROR 💣💣💣');
+    console.error(err);
+    res.render('error/500');
   }
+});
 
-  // if story user doesn't match current login user
-  // strict !== doesn't work because
-  /// ObjectId("6303e05ae5417ca32ba01629") vs 6303e05ae5417ca32ba01629
-  if (story.user != req.user.id) {
-    res.redirect('/stories');
-  } else {
-    // find using {_id: req.params.id} and replace with req.body
-    story = await StoryModel.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      // options, if no resource found then create one, runValidators === check mongoose fields are right
-      { new: true, runValidators: true }
-    );
+// @desc  DELETE Story
+// @route DELETE /stories/:id
 
+// check if already authenticated then move to /dashboard else next
+storiesRouter.delete('/:id', ensureAuth, async (req, res) => {
+  try {
+    await StoryModel.remove({ _id: req.params.id });
     res.redirect('/dashboard');
+  } catch (err) {
+    console.log('💣💣💣 BANG BANG ERROR 💣💣💣');
+    console.error(err);
+    res.render('error/500');
   }
 });
 
