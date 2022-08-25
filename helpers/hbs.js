@@ -42,6 +42,7 @@ export function editIcon(storyUser, loggedUser, storyId, floating = true) {
 
 // found on stackoverflow by travese
 // options is <option/> elements
+// didn't work replaced with pickOptionSelected
 export function select(selected, options) {
   return options
     .fn(this)
@@ -50,4 +51,22 @@ export function select(selected, options) {
       new RegExp('>' + selected + '</option>'),
       ' selected="selected"$&'
     );
+}
+
+export function pickOptionSelected(selected) {
+  if (selected === 'private') {
+    return ` <option value='public'>
+    Public
+  </option>
+  <option value='private' selected>
+    Private
+  </option>`;
+  }
+
+  return ` <option value='public' selected>
+  Public
+</option>
+<option value='private'>
+  Private
+</option>`;
 }

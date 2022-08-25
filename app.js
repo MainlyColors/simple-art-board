@@ -33,6 +33,7 @@ import {
   stripTags,
   editIcon,
   select,
+  pickOptionSelected,
 } from './helpers/hbs.js';
 import { UserModel } from './models/User.js';
 
@@ -42,7 +43,14 @@ app.engine(
   'hbs',
   expHandleBars.engine({
     extname: '.hbs',
-    helpers: { formatDate, truncate, stripTags, editIcon, select },
+    helpers: {
+      formatDate,
+      truncate,
+      stripTags,
+      editIcon,
+      select,
+      pickOptionSelected,
+    },
   })
 );
 app.set('view engine', '.hbs');
