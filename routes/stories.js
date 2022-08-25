@@ -74,4 +74,34 @@ storiesRouter.get('/edit/:id', ensureAuth, async (req, res) => {
   }
 });
 
+// @desc  Update story
+// @route PUT /stories/:id
+
+// check if already authenticated then move to /dashboard else next
+storiesRouter.put('/:id', ensureAuth, async (req, res) => {
+  let story = await StoryModel.findById(req.params.id).lean();
+
+  // story not found
+  if (!story) {
+    return res.render('error/404');
+  }
+
+  // if story user doesn't match current login user
+  // strict !== doesn't work because
+  /// ObjectId("6303e05ae5417ca32ba01629") vs 6303e05ae5417ca32ba01629
+  if (story.user != req.user.id) {
+    res.redirect('/stories');
+  } else {
+    // find using {_id: req.params.id} and replace with req.body
+    story = await StoryModel.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      // options, if no resource found then create one, runValidators === check mongoose fields are right
+      { new: true, runValidators: true }
+    );
+
+    res.redirect('/dashboard');
+  }
+});
+
 export default storiesRouter;

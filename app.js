@@ -2,6 +2,7 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import morgan from 'morgan';
 import * as expHandleBars from 'express-handlebars';
+import methodOverride from 'method-override';
 import passport from 'passport';
 import session from 'express-session';
 import { connectDb } from './config/db.js';
@@ -98,6 +99,19 @@ app.use(express.static('public'));
 // Body parser for form input & JSON data
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Method Override - converts POSTs to other HTTP methods when we use this
+// <input type="hidden" name="_method" value="DELETE">
+app.use(
+  methodOverride(function (req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+      // look in urlencoded POST bodies and delete it
+      let method = req.body._method;
+      delete req.body._method;
+      return method;
+    }
+  })
+);
 
 if (process.env.NODE_ENV === 'development') {
   // logs server requests
