@@ -6,7 +6,9 @@
     <div class='col s12 m4'>
       <div class='card'>
         <div class='card-image'>
-          {{! TODO: editIcon }}
+          {{!-- within this #each user === stories.user, to access the user object that holds current user we need to go one level outside the #each so ../user --}}
+          {{!-- triple {{{}}} to parse HTML with handlebars --}}
+          {{{editIcon user ../user _id}}}
         </div>
         <div class='card-content center-align'>
           <h5>

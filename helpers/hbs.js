@@ -24,3 +24,18 @@ export function stripTags(str) {
   const formateStr = str.replace(/<(?:.|\n)*?>/gm, '');
   return formateStr;
 }
+
+export function editIcon(storyUser, loggedUser, storyId, floating = true) {
+  // checking if story on public board belongs to current logged in user
+  if (storyUser._id.toString() == loggedUser._id.toString()) {
+    // set floating button for public board
+    if (floating) {
+      // storyId points the story uuid
+      return `<a href="/stories/edit/${storyId}" class="btn-floating halfway-fab blue"><i class="fas fa-edit fa-small"></i></a>`;
+    } else {
+      return `<a href="/stories/edit/${storyId}"><i class="fas fa-edit"></i></a>`;
+    }
+  } else {
+    return '';
+  }
+}

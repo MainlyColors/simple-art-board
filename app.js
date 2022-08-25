@@ -27,7 +27,8 @@ const app = express();
 // *****************
 
 // Handlebars Helpers
-import { formatDate, truncate, stripTags } from './helpers/hbs.js';
+import { formatDate, truncate, stripTags, editIcon } from './helpers/hbs.js';
+import { UserModel } from './models/User.js';
 
 // normally Handlebars like this
 // app.engine('handlebars', expHandleBars.engine());
@@ -35,7 +36,7 @@ app.engine(
   'hbs',
   expHandleBars.engine({
     extname: '.hbs',
-    helpers: { formatDate, truncate, stripTags },
+    helpers: { formatDate, truncate, stripTags, editIcon },
   })
 );
 app.set('view engine', '.hbs');
@@ -69,6 +70,13 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// set global variable for express
+app.use(function (req, res, next) {
+  // sets global variable that can be used only within one request-response cycle
+  res.locals.user = req.user || null;
+  next();
+});
 
 // static files
 app.use(express.static('public'));
