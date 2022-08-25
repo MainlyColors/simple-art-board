@@ -31,4 +31,23 @@ storiesRouter.post('/', ensureAuth, async (req, res) => {
   }
 });
 
+// @desc  show all stories
+// @route GET /stories
+
+// check if already authenticated then move to /dashboard else next
+storiesRouter.get('/', ensureAuth, async (req, res) => {
+  try {
+    const stories = await StoryModel.find({ status: 'public' })
+      .populate('user')
+      .sort({ createdAt: 'desc' })
+      .lean();
+
+    res.render('stories/index', { stories });
+  } catch (err) {
+    console.log('💣💣💣 BANG BANG ERROR 💣💣💣');
+    console.error(err);
+    res.render('error/500');
+  }
+});
+
 export default storiesRouter;

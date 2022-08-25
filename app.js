@@ -26,9 +26,18 @@ const app = express();
 // express app settings
 // *****************
 
+// Handlebars Helpers
+import { formatDate, truncate, stripTags } from './helpers/hbs.js';
+
 // normally Handlebars like this
 // app.engine('handlebars', expHandleBars.engine());
-app.engine('hbs', expHandleBars.engine({ extname: '.hbs' }));
+app.engine(
+  'hbs',
+  expHandleBars.engine({
+    extname: '.hbs',
+    helpers: { formatDate, truncate, stripTags },
+  })
+);
 app.set('view engine', '.hbs');
 app.set('views', './views');
 
