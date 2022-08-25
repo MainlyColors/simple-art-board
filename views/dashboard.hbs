@@ -29,7 +29,9 @@
         <tr>
           {{! handlebars automatically knows this is stories._id and stories.title because we are within the loop using #each stories }}
           <td>
-            <a href='/stories/{{_id}}'></a>{{title}}
+            <a href='/stories/{{_id}}'>
+              {{title}}
+            </a>
           </td>
           <td>
             {{! formatDate is a HBS helper functions we created that uses moment.js }}
