@@ -27,7 +27,13 @@ const app = express();
 // *****************
 
 // Handlebars Helpers
-import { formatDate, truncate, stripTags, editIcon } from './helpers/hbs.js';
+import {
+  formatDate,
+  truncate,
+  stripTags,
+  editIcon,
+  select,
+} from './helpers/hbs.js';
 import { UserModel } from './models/User.js';
 
 // normally Handlebars like this
@@ -36,7 +42,7 @@ app.engine(
   'hbs',
   expHandleBars.engine({
     extname: '.hbs',
-    helpers: { formatDate, truncate, stripTags, editIcon },
+    helpers: { formatDate, truncate, stripTags, editIcon, select },
   })
 );
 app.set('view engine', '.hbs');

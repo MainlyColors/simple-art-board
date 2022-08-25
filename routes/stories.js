@@ -50,4 +50,28 @@ storiesRouter.get('/', ensureAuth, async (req, res) => {
   }
 });
 
+// @desc  show edit page
+// @route GET /stories/edit/:id
+
+// check if already authenticated then move to /dashboard else next
+storiesRouter.get('/edit/:id', ensureAuth, async (req, res) => {
+  const story = await StoryModel.findOne({
+    _id: req.params.id,
+  }).lean();
+
+  // if no story in DB then 404
+  if (!story) {
+    return res.render('error/404');
+  }
+
+  // if story user doesn't match current login user
+  // strict !== doesn't work because
+  /// ObjectId("6303e05ae5417ca32ba01629") vs 6303e05ae5417ca32ba01629
+  if (story.user != req.user.id) {
+    res.redirect('/stories');
+  } else {
+    res.render('stories/edit', { story });
+  }
+});
+
 export default storiesRouter;
