@@ -12,6 +12,12 @@ import router from './routes/index.js';
 import authRouter from './routes/auth.js';
 import storiesRouter from './routes/stories.js';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Load Config
 dotenv.config({ path: './config/config.env' });
 
@@ -94,7 +100,7 @@ app.use(function (req, res, next) {
 });
 
 // static files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Body parser for form input & JSON data
 app.use(express.urlencoded({ extended: false }));
